@@ -17,7 +17,7 @@ library(tidyverse)
 library(broom)
 
 # Data import
-le_data <- read_csv("./data/Life-expectancy-by-state-long.csv")
+le_data <- read_csv('C:/Users/Kwong/Desktop/life-expectency/data/Life-expectancy-by-state-long.csv')
 
 # Run a regression model with time coded using a linear term
 mod1 <- lm(LE ~ year, dat = le_data %>% filter(state == "California", race == "black", sex == "Female"))
@@ -33,6 +33,22 @@ ggplot(data = le_data %>% filter(state == "California", race == "black", sex == 
   geom_abline(intercept = -232.4959533, slope = 0.1544538)
 
 # Save the plot
-ggsave(plot = last_plot(), filename = "./images/ca-black-women-LE.png",
+ggsave(plot = last_plot(), filename = "C:/Users/Kwong/Desktop/life-expectency/images/ca-black-women-LE.png",
        width = 5, height = 5,device = "png"
         )
+
+# R Code
+# Calculate the LE for each state, separately by race and gender:
+le_averages <- le_data %>% 
+  group_by(state, race, sex) %>%
+  summarise(mean_LE = mean(LE)) 
+
+# print the first 10 rows to the screen. By default, R rounds the numeric 
+# information in the display to make it more compact 
+le_averages
+# alternatively, type View(le_averages) in the Console to open up a Viewer 
+# window, or click the table icon beside the le_averages objects in the 
+# Environment pane (upper right hand panel of RStudio).
+
+#save this table as a CSV file in the data sub-folder
+write_csv(le_averages, 'C:/Users/Kwong/Desktop/life-expectency/data/le_averages.csv')
